@@ -25,9 +25,19 @@ const Main = () => {
     location: "Athens",
     startingDate: moment().add(1, "d").format("YYYY-MM-DD"),
     endingDate: moment().add(4, "d").format("YYYY-MM-DD"),
+    room_number: 1,
+    adults_number: 2,
+    order_by: "popularity",
   });
 
-  const fetchLocation = async (location, checkin_date, checkout_date) => {
+  const fetchLocation = async (
+    location,
+    checkin_date,
+    checkout_date,
+    room_number,
+    adults_number,
+    order_by
+  ) => {
     const searchOptions = {
       method: "GET",
       url: "https://booking-com.p.rapidapi.com/v1/hotels/locations",
@@ -47,18 +57,16 @@ const Main = () => {
         url: "https://booking-com.p.rapidapi.com/v2/hotels/search",
         params: {
           units: "metric",
-          room_number: "1",
-          adults_number: "2",
-          order_by: "popularity",
+          room_number,
+          adults_number,
+          order_by,
           checkin_date: checkin_date,
           checkout_date: checkout_date,
           dest_id: searchResponseLocation.data[0].dest_id,
           dest_type: "city",
-          filter_by_currency: "AED",
-          locale: "en-gb",
-          page_number: "0",
+          filter_by_currency: "EUR",
+          locale: "en-us",
           include_adjacency: "true",
-          categories_filter_ids: "class::2,class::4,free_cancellation::1",
         },
         headers: headers,
       };
@@ -77,7 +85,14 @@ const Main = () => {
   };
 
   useEffect(() => {
-    fetchLocation(data.location, data.startingDate, data.endingDate);
+    fetchLocation(
+      data.location,
+      data.startingDate,
+      data.endingDate,
+      data.room_number,
+      data.adults_number,
+      data.order_by
+    );
   }, []);
   // if (isLoading) return <Loading />;
   return (
