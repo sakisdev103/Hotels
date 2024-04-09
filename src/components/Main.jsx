@@ -9,7 +9,7 @@ const GlobalContext = createContext();
 
 export const useGlobalContext = () => useContext(GlobalContext);
 
-const API_KEY = "fdaacdf9damshfa3231c7d4ecee9p1d8dd9jsn8b65d79bc3be";
+const API_KEY = "b72b8bccc8msh64b63b48215e70ap1b1344jsncc36fe83026a";
 const API_HOST = "booking-com.p.rapidapi.com";
 
 const headers = {
@@ -18,27 +18,21 @@ const headers = {
 };
 
 const Main = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [hotels, setHotels] = useState();
 
   const [data, setData] = useState({
-    location: "Athens",
-    startingDate: moment().add(1, "d").format("YYYY-MM-DD"),
+    location: "Thessaloniki, Macedonia, Greece",
+    startingDate: moment().format("YYYY-MM-DD"),
     endingDate: moment().add(4, "d").format("YYYY-MM-DD"),
     room_number: 1,
     adults_number: 2,
     order_by: "popularity",
+    dest_id: "-829252",
   });
 
-  const fetchLocation = async (
-    location,
-    checkin_date,
-    checkout_date,
-    room_number,
-    adults_number,
-    order_by
-  ) => {
-    const searchOptions = {
+  const fetchLocation = async (location) => {
+    const searchLocationOptions = {
       method: "GET",
       url: "https://booking-com.p.rapidapi.com/v1/hotels/locations",
       params: {
@@ -47,67 +41,81 @@ const Main = () => {
       },
       headers: headers,
     };
+    try {
+      const searchResponseLocation = await axios.request(searchLocationOptions);
+      console.log(searchResponseLocation.data);
+      setData({
+        ...data,
+        location: searchResponseLocation.data[0].label,
+        dest_id: searchResponseLocation.data[0].dest_id,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchHotels = async (
+    checkin_date,
+    checkout_date,
+    room_number,
+    adults_number,
+    order_by,
+    dest_id
+  ) => {
+    setIsLoading(true);
+    const searchHotelsOptions = {
+      method: "GET",
+      url: "https://booking-com.p.rapidapi.com/v2/hotels/search",
+      params: {
+        units: "metric",
+        room_number,
+        adults_number,
+        order_by,
+        checkin_date,
+        checkout_date,
+        dest_id,
+        dest_type: "city",
+        filter_by_currency: "EUR",
+        locale: "en-us",
+        include_adjacency: "true",
+      },
+      headers: headers,
+    };
 
     try {
-      const searchResponseLocation = await axios.request(searchOptions);
-      console.log(searchResponseLocation.data);
-      setIsLoading(true);
-      const options = {
-        method: "GET",
-        url: "https://booking-com.p.rapidapi.com/v2/hotels/search",
-        params: {
-          units: "metric",
-          room_number,
-          adults_number,
-          order_by,
-          checkin_date: checkin_date,
-          checkout_date: checkout_date,
-          dest_id: searchResponseLocation.data[0].dest_id,
-          dest_type: "city",
-          filter_by_currency: "EUR",
-          locale: "en-us",
-          include_adjacency: "true",
-        },
-        headers: headers,
-      };
-
-      try {
-        const response = await axios.request(options);
-        console.log(response.data.results);
-        setHotels(response.data.results);
-        setIsLoading(false);
-      } catch (error) {
-        console.error(error);
-      }
+      const response = await axios.request(searchHotelsOptions);
+      console.log(response.data.results);
+      setHotels(response.data.results);
+      setIsLoading(false);
     } catch (error) {
       console.error(error);
     }
   };
 
   useEffect(() => {
-    fetchLocation(
-      data.location,
-      data.startingDate,
-      data.endingDate,
-      data.room_number,
-      data.adults_number,
-      data.order_by
-    );
-  }, []);
-  // if (isLoading) return <Loading />;
+    const timeoutId = setTimeout(() => {
+      fetchLocation(data.location);
+    }, 1500);
+    return () => clearTimeout(timeoutId);
+  }, [data.location]);
+
   return (
     <>
       <GlobalContext.Provider
         value={{
+          API_KEY,
+          API_HOST,
+          headers,
           hotels,
           setHotels,
           data,
           setData,
           fetchLocation,
+          fetchHotels,
         }}
       >
         <Search />
-        {isLoading ? <Loading /> : <Hotels />}
+        {isLoading ? <Loading /> : hotels !== undefined && <Hotels />}
       </GlobalContext.Provider>
     </>
   );

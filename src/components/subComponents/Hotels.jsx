@@ -2,20 +2,20 @@ import React from "react";
 import { useGlobalContext } from "../Main";
 
 const Hotels = () => {
-  const { hotels, data, setData, fetchLocation } = useGlobalContext();
+  const { hotels, data, setData, fetchHotels } = useGlobalContext();
 
   const filters = (e) => {
     setData({
       ...data,
       order_by: e.target.value,
     });
-    fetchLocation(
-      data.location,
+    fetchHotels(
       data.startingDate,
       data.endingDate,
       data.room_number,
       data.adults_number,
-      data.order_by
+      data.order_by,
+      data.dest_id
     );
   };
 
@@ -23,7 +23,7 @@ const Hotels = () => {
     <>
       <div className="container-fluid my-4">
         {hotels.length > 0 && (
-          <div className="container my-4" style={{ width: "30%" }}>
+          <div className="container my-4 filter-select">
             <select className="form-select" defaultValue={data.order_by}>
               <option value="popularity" onClick={filters}>
                 Popularity
