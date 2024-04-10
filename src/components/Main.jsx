@@ -8,8 +8,7 @@ import Loading from "./subComponents/Loading";
 const GlobalContext = createContext();
 
 export const useGlobalContext = () => useContext(GlobalContext);
-
-const API_KEY = "b72b8bccc8msh64b63b48215e70ap1b1344jsncc36fe83026a";
+const API_KEY = process.env.REACT_APP_HOTEL_API_KEY;
 const API_HOST = "booking-com.p.rapidapi.com";
 
 const headers = {
@@ -44,7 +43,7 @@ const Main = () => {
     };
     try {
       const searchResponseLocation = await axios.request(searchLocationOptions);
-      console.log(searchResponseLocation.data);
+      // console.log(searchResponseLocation.data);
       setData({
         ...data,
         location: searchResponseLocation.data[0].label,
@@ -85,7 +84,7 @@ const Main = () => {
 
     try {
       const response = await axios.request(searchHotelsOptions);
-      console.log(response.data);
+      // console.log(response.data);
       setHotels(response.data.result);
       setFilterOptions(response.data.sort);
       setIsLoading(false);
