@@ -6,7 +6,7 @@ import moment from "moment";
 
 const ModalComponent = ({ modalId, show, setShow }) => {
   const { data, setData, fetchHotels } = useGlobalContext();
-  console.log(data);
+
   const closeModal = (modal_id) => {
     setShow(false);
     if (modal_id === 1) {
