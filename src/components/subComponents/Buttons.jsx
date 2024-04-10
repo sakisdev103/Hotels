@@ -5,27 +5,12 @@ import calendar from "../../img/calendar.png";
 import person from "../../img/person.png";
 import moment from "moment";
 
-const Buttons = ({ setModal, show, setShow }) => {
+const Buttons = ({ setModalId, show, setShow }) => {
   const { data, fetchHotels } = useGlobalContext();
 
-  const modalFunc = (id, desc) => {
+  const modalFunc = (id) => {
     setShow(!show);
-    if (desc === "location") {
-      setModal({
-        id,
-        title: desc,
-      });
-    } else if (desc === "dates") {
-      setModal({
-        id,
-        title: desc,
-      });
-    } else {
-      setModal({
-        id,
-        title: desc,
-      });
-    }
+    setModalId(id);
   };
   const fetchBasedOnCriteria = (e) => {
     e.preventDefault();
@@ -41,12 +26,12 @@ const Buttons = ({ setModal, show, setShow }) => {
   return (
     <>
       <div className="row row-gap-2">
-        <div className="container col col-12 col-lg-10">
+        <div className="container col col-12 col-xl-10">
           <div className="row row-gap-2">
-            <div className="col col-12 col-sm-4">
+            <div className="col col-12 col-lg-5">
               <button
-                className="d-flex align-items-center column-gap-1 btn border-secondary"
-                onClick={() => modalFunc(1, "location")}
+                className="d-flex align-items-center column-gap-1 btn border-secondary-subtle"
+                onClick={() => modalFunc(1)}
               >
                 <img src={location} className="img-fluid" alt="location" />
                 <div className="container text-start">
@@ -55,10 +40,10 @@ const Buttons = ({ setModal, show, setShow }) => {
                 </div>
               </button>
             </div>
-            <div className="col col-12 col-sm-4">
+            <div className="col col-12 col-lg-3">
               <button
-                className="d-flex align-items-center column-gap-1 btn border-secondary"
-                onClick={() => modalFunc(2, "dates")}
+                className="d-flex align-items-center column-gap-1 btn border-secondary-subtle"
+                onClick={() => modalFunc(2)}
               >
                 <img src={calendar} className="img-fluid" alt="" />
                 <div className="container text-start">
@@ -70,14 +55,14 @@ const Buttons = ({ setModal, show, setShow }) => {
                 </div>
               </button>
             </div>
-            <div className="col col-12 col-sm-4">
+            <div className="col col-12 col-lg-4">
               <button
-                className="d-flex align-items-center column-gap-1 btn border-secondary"
-                onClick={() => modalFunc(3, "travellers")}
+                className="d-flex align-items-center column-gap-1 btn border-secondary-subtle"
+                onClick={() => modalFunc(3)}
               >
                 <img src={person} className="img-fluid" alt="" />
                 <div className="container text-start">
-                  <h5 className="m-0 p-0">Rooms</h5>
+                  <h5 className="m-0 p-0">Travelers</h5>
                   <p className="m-0 p-0">
                     {`${data.adults_number} ${
                       data.adults_number > 1 ? "travelers" : "traveler"
@@ -88,7 +73,7 @@ const Buttons = ({ setModal, show, setShow }) => {
             </div>
           </div>
         </div>
-        <div className="container col col-6 col-sm-4 col-md-3 col-lg-2">
+        <div className="container col col-6 col-sm-4 col-md-3 col-xl-2">
           <button
             className="btn btn-primary btn-lg rounded-pill mt-2"
             onClick={fetchBasedOnCriteria}
@@ -96,17 +81,6 @@ const Buttons = ({ setModal, show, setShow }) => {
             Search
           </button>
         </div>
-
-        {/* <div className="col col-12 col-md-4 col-lg-3">
-        </div>
-        <div className="col col-12 col-sm-6 col-md-4 col-lg-3">
-        </div>
-        <div className="col col-12 col-sm-6 col-md-4 col-lg-3">
-        </div>
-
-        <div className="container col col-6 col-sm-4 col-md-3 col-lg-2 ">
-          
-        </div> */}
       </div>
     </>
   );

@@ -20,6 +20,7 @@ const headers = {
 const Main = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [hotels, setHotels] = useState();
+  const [filterOptions, setFilterOptions] = useState();
 
   const [data, setData] = useState({
     location: "Thessaloniki, Macedonia, Greece",
@@ -65,7 +66,7 @@ const Main = () => {
     setIsLoading(true);
     const searchHotelsOptions = {
       method: "GET",
-      url: "https://booking-com.p.rapidapi.com/v2/hotels/search",
+      url: "https://booking-com.p.rapidapi.com/v1/hotels/search",
       params: {
         units: "metric",
         room_number,
@@ -84,8 +85,9 @@ const Main = () => {
 
     try {
       const response = await axios.request(searchHotelsOptions);
-      console.log(response.data.results);
-      setHotels(response.data.results);
+      console.log(response.data);
+      setHotels(response.data.result);
+      setFilterOptions(response.data.sort);
       setIsLoading(false);
     } catch (error) {
       console.error(error);
@@ -108,6 +110,8 @@ const Main = () => {
           headers,
           hotels,
           setHotels,
+          filterOptions,
+          setFilterOptions,
           data,
           setData,
           fetchLocation,

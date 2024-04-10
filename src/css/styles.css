@@ -2,8 +2,16 @@
   width: 100%;
 }
 
+.card-body {
+  padding: 1rem 0rem;
+}
+
 .filter-select {
   width: 50%;
+}
+
+.smaller-p {
+  font-size: 0.8rem;
 }
 
 @media screen and (min-width: 576px) {
@@ -15,12 +23,16 @@
   .filter-select {
     width: 30%;
   }
+  .card-body {
+    padding: 1rem 0.5rem;
+  }
 }
 @media screen and (min-width: 992px) {
   .filter-select {
     width: 20%;
   }
 }
+
 @media screen and (min-width: 1400px) {
   .filter-select {
     width: 15%;

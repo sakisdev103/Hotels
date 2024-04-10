@@ -4,12 +4,12 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import moment from "moment";
 
-const ModalComponent = ({ modal, show, setShow }) => {
+const ModalComponent = ({ modalId, show, setShow }) => {
   const { data, setData, fetchHotels } = useGlobalContext();
 
-  const closeModal = (modalId) => {
+  const closeModal = (modal_id) => {
     setShow(false);
-    if (modalId === 1) {
+    if (modal_id === 1) {
       setData({
         ...data,
         location:
@@ -19,7 +19,7 @@ const ModalComponent = ({ modal, show, setShow }) => {
         dest_id: data.location === "" ? "-829252" : data.dest_id,
         order_by: "popularity",
       });
-    } else if (modalId === 2) {
+    } else if (modal_id === 2) {
       setData({
         ...data,
         startingDate: moment().format("YYYY-MM-DD"),
@@ -60,8 +60,8 @@ const ModalComponent = ({ modal, show, setShow }) => {
     }
   };
 
-  const saveChanges = (modalId) => {
-    if (modalId === 1) {
+  const saveChanges = (modal_id) => {
+    if (modal_id === 1) {
       fetchHotels(
         data.startingDate,
         data.endingDate,
@@ -77,7 +77,7 @@ const ModalComponent = ({ modal, show, setShow }) => {
   return (
     <Modal
       show={show}
-      onHide={() => closeModal(modal.id)}
+      onHide={() => closeModal(modalId)}
       size="xl"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -85,7 +85,7 @@ const ModalComponent = ({ modal, show, setShow }) => {
     >
       <Modal.Header closeButton></Modal.Header>
       <Modal.Body>
-        {modal.id === 1 ? (
+        {modalId === 1 ? (
           <input
             type="text"
             name="location"
@@ -93,7 +93,7 @@ const ModalComponent = ({ modal, show, setShow }) => {
             onChange={handleInput}
             value={data.location}
           />
-        ) : modal.id === 2 ? (
+        ) : modalId === 2 ? (
           <div className="d-flex column-gap-2">
             <input
               type="date"
@@ -111,7 +111,7 @@ const ModalComponent = ({ modal, show, setShow }) => {
               className="form-control"
               onChange={handleInput}
               value={data.endingDate}
-              min={data.startingDate}
+              min={moment(data.startingDate).add(1, "d").format("YYYY-MM-DD")}
             />
           </div>
         ) : (
@@ -162,7 +162,7 @@ const ModalComponent = ({ modal, show, setShow }) => {
         <Button
           variant="primary"
           style={{ width: "30%" }}
-          onClick={() => saveChanges(modal.id)}
+          onClick={() => saveChanges(modalId)}
         >
           Save
         </Button>

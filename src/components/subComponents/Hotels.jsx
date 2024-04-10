@@ -1,8 +1,10 @@
 import React from "react";
 import { useGlobalContext } from "../Main";
+import moment from "moment";
 
 const Hotels = () => {
-  const { hotels, data, setData, fetchHotels } = useGlobalContext();
+  const { hotels, filterOptions, data, setData, fetchHotels } =
+    useGlobalContext();
 
   const filters = (e) => {
     setData({
@@ -14,80 +16,132 @@ const Hotels = () => {
       data.endingDate,
       data.room_number,
       data.adults_number,
-      data.order_by,
+      e.target.value,
       data.dest_id
     );
   };
 
+  // console.log(moment(data.endingDate).diff(moment(data.startingDate), "days"));
+
   return (
     <>
-      <div className="container-fluid my-4">
+      <div className="container my-4">
         {hotels.length > 0 && (
           <div className="container my-4 filter-select">
             <select className="form-select" defaultValue={data.order_by}>
-              <option value="popularity" onClick={filters}>
-                Popularity
-              </option>
-              <option value="distance" onClick={filters}>
-                Distance from town
-              </option>
-              <option value="review_score" onClick={filters}>
-                Customers Reviews
-              </option>
-              <option value="price" onClick={filters}>
-                Price
-              </option>
+              {filterOptions.map(({ id, name }) => {
+                return (
+                  <option value={id} onClick={filters} key={id}>
+                    {name}
+                  </option>
+                );
+              })}
             </select>
           </div>
         )}
-        <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 row-gap-3">
-          {hotels.length > 0 ? (
-            hotels.map(
-              ({
-                id,
-                name,
-                photoMainUrl,
-                reviewScore,
-                reviewScoreWord,
-                reviewCount,
-                wishlistName,
-                priceBreakdown,
-              }) => {
-                return (
-                  <div className="col" key={id}>
-                    <div className="card">
+        {hotels.length > 0 ? (
+          hotels.map(
+            ({
+              hotel_id,
+              hotel_name,
+              max_photo_url,
+              review_score,
+              review_nr,
+              default_wishlist_name,
+              district,
+              distance_to_cc,
+              distance_to_cc_formatted,
+              unit_configuration_label,
+              urgency_message,
+              composite_price_breakdown,
+            }) => {
+              return (
+                <div className="card mb-3 p-3" key={hotel_id}>
+                  <div className="row g-0">
+                    <div className="col-md-4 col-lg-3">
                       <img
-                        src={photoMainUrl}
+                        src={max_photo_url}
                         alt="Hotel"
                         className="card-img-top rounded"
-                        style={{ height: "30vh" }}
+                        style={{ height: "21vh" }}
                       />
+                    </div>
+                    <div className="col-md-8 col-lg-9">
                       <div className="card-body">
-                        <p className="card-text">
-                          <b>{`${reviewScore}/10`}</b> {reviewScoreWord}{" "}
-                          {`(${reviewCount} comments)`}
-                        </p>
-                        <h5 className="card-title">{name}</h5>
-                        <div className="d-flex justify-content-between align-items-center">
-                          <p>{wishlistName}</p>
+                        <div className="d-flex justify-content-between column-gap-3">
+                          <h5 className="card-title">{hotel_name}</h5>
+                          <div className="card-text">
+                            <b>
+                              {review_score !== null && `${review_score}/10`}
+                            </b>
+                            <p className="smaller-p">
+                              {review_score !== null && `${review_nr} reviews`}
+                            </p>
+                          </div>
+                        </div>
+                        <div
+                          className="d-flex justify-content-between"
+                          style={{ fontWeight: "600" }}
+                        >
+                          <p className="w-50">
+                            {district.length > 0
+                              ? `${district}, ${default_wishlist_name}`
+                              : default_wishlist_name}
+                          </p>
+                          <p className="smaller-p">
+                            {distance_to_cc_formatted === "0"
+                              ? `${distance_to_cc.slice(0, 3)} km from centre`
+                              : distance_to_cc_formatted !== undefined &&
+                                `${distance_to_cc_formatted} from centre`}
+                          </p>
+                        </div>
+                        <div className="d-flex justify-content-between">
                           <div>
                             <p
-                              style={{ fontWeight: "700" }}
-                            >{`Total: ${priceBreakdown.grossPrice.value.toFixed()} €`}</p>
+                              className={`smaller-p ${
+                                unit_configuration_label.length > 30 && `w-75`
+                              }`}
+                              dangerouslySetInnerHTML={{
+                                __html: unit_configuration_label,
+                              }}
+                            />
+                            <p className="text-danger">{urgency_message}</p>
+                          </div>
+                          <div>
+                            <p style={{ fontWeight: "700" }}>
+                              {
+                                composite_price_breakdown.all_inclusive_amount
+                                  .amount_rounded
+                              }
+                            </p>
+                            {/* <p className="smaller-p">
+                              {moment(data.endingDate).diff(
+                                moment(data.startingDate),
+                                "days"
+                              ) > 1
+                                ? `${moment(data.endingDate).diff(
+                                    moment(data.startingDate),
+                                    "days"
+                                  )} nights`
+                                : `${moment(data.endingDate).diff(
+                                    moment(data.startingDate),
+                                    "days"
+                                  )} night`}
+                            </p> */}
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                );
-              }
-            )
-          ) : (
-            <div className="container-fluid text-center my-5">
-              <h1>Didn't find any hotels</h1>
-            </div>
-          )}
-        </div>
+                </div>
+              );
+            }
+          )
+        ) : (
+          <div className="container-fluid text-center my-5">
+            <h1>Didn't find any hotels</h1>
+          </div>
+        )}
       </div>
     </>
   );
