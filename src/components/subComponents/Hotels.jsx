@@ -89,7 +89,7 @@ const Hotels = () => {
                       <div className="card-body">
                         <div className="d-flex justify-content-between column-gap-3">
                           <h5 className="card-title">{hotel_name}</h5>
-                          <div className="card-text">
+                          <div className="card-text text-end">
                             <b>
                               {review_score !== null && `${review_score}/10`}
                             </b>
