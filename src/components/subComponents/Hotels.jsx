@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { useGlobalContext } from "../Main";
 import moment from "moment";
+import Alert from "./Alert";
 
 const Hotels = () => {
   const { hotels, filterOptions, data, setData, fetchHotels } =
     useGlobalContext();
+
+  const [showAlert, setShowAlert] = useState(false);
+  const [url, setUrl] = useState();
 
   const filters = (e) => {
     setData({
@@ -19,6 +23,11 @@ const Hotels = () => {
       e.target.value,
       data.dest_id
     );
+  };
+
+  const modalFunc = (url) => {
+    setShowAlert(!showAlert);
+    setUrl(url);
   };
 
   // console.log(moment(data.endingDate).diff(moment(data.startingDate), "days"));
@@ -58,9 +67,15 @@ const Hotels = () => {
               unit_configuration_label,
               urgency_message,
               composite_price_breakdown,
+              url,
             }) => {
               return (
-                <div className="card mb-3 p-3" key={hotel_id}>
+                <button
+                  className="card mb-3 p-3 text-start"
+                  style={{ width: "100%" }}
+                  onClick={() => modalFunc(url)}
+                  key={hotel_id}
+                >
                   <div className="row g-0">
                     <div className="col-md-4 col-lg-3">
                       <img
@@ -137,7 +152,7 @@ const Hotels = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </button>
               );
             }
           )
@@ -147,6 +162,7 @@ const Hotels = () => {
           </div>
         )}
       </div>
+      <Alert showAlert={showAlert} setShowAlert={setShowAlert} url={url} />
     </>
   );
 };
