@@ -3,6 +3,8 @@ import { useGlobalContext } from "../Main";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import moment from "moment";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const ModalComponent = ({ modalId, show, setShow }) => {
   const { data, setData, fetchHotels } = useGlobalContext();
@@ -78,7 +80,6 @@ const ModalComponent = ({ modalId, show, setShow }) => {
     <Modal
       show={show}
       onHide={() => closeModal(modalId)}
-      size="xl"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       className="text-black"
@@ -94,25 +95,45 @@ const ModalComponent = ({ modalId, show, setShow }) => {
             value={data.location}
           />
         ) : modalId === 2 ? (
-          <div className="d-flex column-gap-2">
-            <input
-              type="date"
-              name="startingDate"
-              className="form-control"
-              onChange={handleInput}
-              value={data.startingDate}
-              max={moment(data.endingDate)
-                .subtract(1, "d")
-                .format("YYYY-MM-DD")}
-            />
-            <input
-              type="date"
-              name="endingDate"
-              className="form-control"
-              onChange={handleInput}
-              value={data.endingDate}
-              min={moment(data.startingDate).add(1, "d").format("YYYY-MM-DD")}
-            />
+          <div className="container d-flex justify-content-between column-gap-3">
+            <div>
+              <h5 className="text-center">Check-in date</h5>
+              <DatePicker
+                name="startingDate"
+                className="form-control"
+                selectsStart
+                selected={data.startingDate}
+                value={data.startingDate}
+                onChange={(e) =>
+                  setData({
+                    ...data,
+                    startingDate: moment(e).format("YYYY-MM-DD"),
+                    endingDate: moment(e).add(1, "d").format("YYYY-MM-DD"),
+                  })
+                }
+                startDate={moment(data.startingDate).toDate()}
+              />
+            </div>
+            <div>
+              <h5 className="text-center">Check-out date</h5>
+              <DatePicker
+                name="endingDate"
+                className="form-control"
+                selectsEnd
+                selected={data.endingDate}
+                value={data.endingDate}
+                onChange={(e) =>
+                  setData({
+                    ...data,
+                    endingDate: moment(e).format("YYYY-MM-DD"),
+                  })
+                }
+                minDate={moment(data.startingDate)
+                  .add(1, "d")
+                  .format("YYYY-MM-DD")}
+                startDate={moment(data.startingDate).toDate()}
+              />
+            </div>
           </div>
         ) : (
           <div className="container">
