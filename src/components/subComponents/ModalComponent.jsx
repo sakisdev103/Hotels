@@ -115,6 +115,7 @@ const ModalComponent = ({ modalId, show, setShow }) => {
                 startDate={moment(data.startingDate).toDate()}
                 disabledKeyboardNavigation
                 withPortal
+                onFocus={(e) => (e.target.readOnly = true)}
               />
             </div>
             <div>
@@ -137,6 +138,7 @@ const ModalComponent = ({ modalId, show, setShow }) => {
                 startDate={moment(data.startingDate).toDate()}
                 disabledKeyboardNavigation
                 withPortal
+                onFocus={(e) => (e.target.readOnly = true)}
               />
             </div>
           </div>
