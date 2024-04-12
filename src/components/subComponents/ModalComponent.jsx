@@ -111,7 +111,10 @@ const ModalComponent = ({ modalId, show, setShow }) => {
                     endingDate: moment(e).add(1, "d").format("YYYY-MM-DD"),
                   })
                 }
+                minDate={moment().format("YYYY-MM-DD")}
                 startDate={moment(data.startingDate).toDate()}
+                disabledKeyboardNavigation
+                withPortal
               />
             </div>
             <div>
@@ -132,6 +135,8 @@ const ModalComponent = ({ modalId, show, setShow }) => {
                   .add(1, "d")
                   .format("YYYY-MM-DD")}
                 startDate={moment(data.startingDate).toDate()}
+                disabledKeyboardNavigation
+                withPortal
               />
             </div>
           </div>
