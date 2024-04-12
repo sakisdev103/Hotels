@@ -37,14 +37,18 @@ const Hotels = () => {
       <div className="container my-4">
         {hotels.length > 0 && (
           <div className="container my-4 filter-select">
-            <select className="form-select" defaultValue={data.order_by}>
+            <select
+              className="form-select"
+              defaultValue={data.order_by}
+              onChange={filters}
+            >
               {filterOptions
                 .filter((option) => {
                   return option.id !== "bayesian_review_score";
                 })
                 .map(({ id, name }) => {
                   return (
-                    <option value={id} onClick={filters} key={id}>
+                    <option value={id} key={id}>
                       {name}
                     </option>
                   );
