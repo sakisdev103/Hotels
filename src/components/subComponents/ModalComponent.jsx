@@ -97,7 +97,7 @@ const ModalComponent = ({ modalId, show, setShow }) => {
         ) : modalId === 2 ? (
           <div className="container d-flex justify-content-between column-gap-3">
             <div>
-              <h5 className="text-center">Check-in date</h5>
+              <h6 className="text-center">Check-in date</h6>
               <DatePicker
                 name="startingDate"
                 className="form-control"
@@ -115,7 +115,7 @@ const ModalComponent = ({ modalId, show, setShow }) => {
               />
             </div>
             <div>
-              <h5 className="text-center">Check-out date</h5>
+              <h6 className="text-center">Check-out date</h6>
               <DatePicker
                 name="endingDate"
                 className="form-control"
