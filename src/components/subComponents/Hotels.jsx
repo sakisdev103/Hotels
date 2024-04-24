@@ -80,13 +80,13 @@ const Hotels = () => {
                   onClick={() => modalFunc(url)}
                   key={hotel_id}
                 >
-                  <div className="row g-0">
+                  <div className="row">
                     <div className="col-md-4 col-lg-3">
                       <img
                         src={max_photo_url}
                         alt="Hotel"
-                        className="card-img-top rounded"
-                        style={{ height: "21vh" }}
+                        className="img-fluid rounded"
+                        style={{maxHeight: '25vh', width: '100vw'}}
                       />
                     </div>
                     <div className="col-md-8 col-lg-9">
